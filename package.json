@@ -1,0 +1,11 @@
+{
+  "name": "deps-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Alexander Mekhonoshin (invntrm) <invntrm@yandex-team.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "bem-decl": "^0.3.0",
+    "browserify": "^13.1.1"
+  }
+}
