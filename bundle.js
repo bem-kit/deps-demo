@@ -46,13 +46,14 @@ const onExitExamples = () => {
 }
 
 // todo: переписать на какой-нибудь популярный роутер
-const go = (uri, link) => {
-    console.log('go', uri);
+const go = (uri, link, shouldNotChangeHistory) => {
+    uri = uri || '/'
+    console.log('go', uri, link, shouldNotChangeHistory);
     switch(uri) {
         case '/examples': history.pushState({}, 'examples', '#!'+uri); $examples.classList.remove('_hidden'); $$('.main').forEach(el=>el.classList.add('_inactive')); break;
-        case '/example': $input.value = link&&link.dataset.content; console.log('link.dataset.content', link.dataset.content); onInput(); console.log('done', link, uri); location.hash === '#!/examples' && onExitExamples(); history.pushState({}, 'example', '/'); break;
-        case '/': location.hash === '#!/examples' && onExitExamples(); history.pushState({}, $('title').innerHTML, '#!'+uri); break;
-        defalut: history.replaceState({},'404','#!/404')
+        case '/example': $input.value = link&&link.dataset.content; console.log('link.dataset.content', link.dataset.content); onInput(); console.log('done', link, uri); onExitExamples(); shouldNotChangeHistory || history.pushState({}, 'example', '/'); break;
+        case '/': onExitExamples(); shouldNotChangeHistory || history.pushState({}, $('title').innerHTML, '#!'+uri); break;
+        defalut: shouldNotChangeHistory || history.replaceState({},'404','#!/404')
     }
 }
 
@@ -62,9 +63,15 @@ const initPage = () => {
     go(location.hash.replace('#!',''))
 }
 
+window.onpopstate = () => {
+    setTimeout(() => go(location.hash.replace('#!',''), null, true), 0)
+}
+
 initPage()
 
-
+window.addEventListener('keyup', e => {
+    e.keyCode === 27 && location.hash === '#!/examples' && go('/')
+})
 
 },{"bem-decl/lib/normalize":2,"lodash/omit":141,"node-eval":145}],2:[function(require,module,exports){
 'use strict';
