@@ -50,7 +50,7 @@ const go = (uri, link, shouldNotChangeHistory) => {
     console.log('go', uri, link, shouldNotChangeHistory);
     switch(uri) {
         case '/examples': history.pushState({}, 'examples', '#!'+uri); $examples.classList.remove('_hidden'); $$('.main').forEach(el=>el.classList.add('_inactive')); break;
-        case '/example': $input.value = link&&link.dataset.content; console.log('link.dataset.content', link.dataset.content); onInput(); console.log('done', link, uri); onExitExamples(); shouldNotChangeHistory || history.pushState({}, 'example', '/'); break;
+        case '/example': $input.value = link&&stringify(nodeEval(`(${link.dataset.content})`)); console.log('link.dataset.content', link.dataset.content); onInput(); console.log('done', link, uri); onExitExamples(); shouldNotChangeHistory || history.pushState({}, 'example', '/'); break;
         case '/': onExitExamples(); shouldNotChangeHistory || history.pushState({}, $('title').innerHTML, '#!'+uri); break;
         defalut: shouldNotChangeHistory || history.replaceState({},'404','#!/404')
     }
