@@ -76,16 +76,44 @@
         color: orangered;
         background: rgba(255, 173, 47, 0.01);
     }
+
+    .over-link { position: absolute; }
+
+    ._hidden {display: none;}
+
+    .examples {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(255, 255, 255, 0.9);
+        padding: calc(10px + 1vw);
+    }
+    ._inactive {
+        filter: blur(3px);
+    }
+    .link_pseudo { text-decoration: none; }
     </style>
 </head>
 
 <body>
-    <h1>Deps.js playground</h1>
-    <main>
+    <div class="main">
+        <a href="/examples" class="over-link examples-link">Примеры</a>
+        <h1>Deps.js playground</h1>
+    </div>
+    <main class="main">
         <textarea id="input" autofocus spellcheck="false"></textarea>
         <textarea id="output" readonly></textarea>
     </main>
-    <div class="status">ready</div>
+    <div class="status main">ready</div>
+    <section class="examples _hidden">
+        <h1><a href="/" class="link_pseudo close-examples-link">❌</a> Примеры</h1>
+        <ul>
+            <li><a href="/example" data-content="{block: 'block'}">block</a></li>
+            <li><a href="/example" data-content="{block: 'block', elem: ['el1', 'el2']}">elem</a></li>
+            <li><a href="/example" data-content="{block: 'block', elems: ['el1', 'el2']}">elems</a></li>
+            <li><a href="/example" data-content="{block: 'block', mods: {mod1: 'val1', mod2: 'val2'}}">mods</a></li>
+            <li><a href="/example" data-content="{block: 'block', tech: 'js'}">tech</a></li>
+        </ul>
+    </section>
 </body>
 
 </html>
