@@ -1,4 +1,4 @@
-const declNormalize = require('bem-decl/lib/normalize/v2')
+const declNormalize = require('bem-decl/lib/normalize2')
 const nodeEval = require('node-eval')
 const inspect = require('util').inspect
 const $ = selector => document.querySelector(selector)
