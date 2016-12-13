@@ -34,21 +34,24 @@
     }
 
     body > * {
-        margin-top: calc(10px + 1vh);
+        margin-bottom: calc(10px + 1vh);
     }
 
     main {
         display: flex;
+        height: 100%;
+        padding-bottom: 2em;
     }
 
     textarea {
         flex-basis: 50%;
-        height: 50vh;
+        height: 100%;
         padding: 1em;
 
         letter-spacing: .1em;
         font-family: Consolas, Monaco, 'Source Code Pro', 'Roboto Mono', 'Droid Sans Mono', 'Courier New', Courier, monospace;
         font-size: 18px;
+        resize: none;
     }
 
     textarea + textarea {
@@ -58,6 +61,10 @@
     textarea:focus {
         outline: none;
         box-shadow: 0 0 30px rgba(255, 165, 0, 0.2);
+    }
+
+    h1 {
+        margin-bottom: 0;
     }
 
     .status {
@@ -78,7 +85,7 @@
         background: rgba(255, 173, 47, 0.01);
     }
 
-    .over-link { position: absolute; }
+    /* .over-link { position: absolute; } */
 
     ._hidden {display: none;}
 
@@ -97,7 +104,12 @@
 
 <body>
     <div class="main">
-        <a href="/examples" class="over-link examples-link">Примеры</a>
+        <div>
+            <a href="/examples" class="over-link examples-link">Примеры</a>
+            <span>Сериализация: </span>
+            <label><input id="stringify-inspect" checked type="radio" name="stringify" value="inspect"> util.inspect</label>
+            <label><input id="stringify-json" type="radio" name="stringify" value="json"> JSON.stringify</label>
+        </div>
         <h1>Deps.js playground</h1>
     </div>
     <main class="main">

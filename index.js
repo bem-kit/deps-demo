@@ -1,15 +1,30 @@
-const bemdecl = require('bem-decl/lib/normalize')
+const declNormalize = require('bem-decl/lib/normalize2')
 const nodeEval = require('node-eval')
-// const util = require('util')
-const stringify = json => JSON.stringify(json, null, 4) // util.inspect { depth: null, maxArrayLength: null }
+const inspect = require('util').inspect
 const $ = selector => document.querySelector(selector)
 const $$ = selector => Array.from(document.querySelectorAll(selector))
 const omit = require('lodash/omit')
+
+let stringify;
+const stringifiers = {
+    json: json => JSON.stringify(json, null, 4),
+    inspect: json => inspect(json, { depth: null, maxArrayLength: null }),
+};
+const syncStringifier = what => {
+    if (what) {
+        localStorage.setItem('stringifier', what);
+    } else {
+        what = localStorage.getItem('stringifier');
+    }
+    stringify = stringifiers[what] || stringifiers.inspect;
+};
 
 const $status = $('.status')
 const $input = document.getElementById('input')
 const $output = document.getElementById('output')
 const $examples = $('.examples')
+const $stringifierInspect = $('#stringify-inspect')
+const $stringifierJson = $('#stringify-json')
 
 const log = args => ($status.innerHTML = args.toString(), $status.classList.remove('_ok'), $status.classList.remove('_error'))
 const error = args => ($status.innerHTML = args.toString(), $status.classList.remove('_ok'), $status.classList.add('_error'))
@@ -19,11 +34,16 @@ const onOutput = val => {console.info('ok'); localStorage.setItem('input', $inpu
 const output = val => {$output.value = val; onOutput(val)}
 const onInput = () => {
     try {
-        const builtDeps = bemdecl(nodeEval(`(${$input.value})`))
-        const builtDeps_ = builtDeps.map(item => Object.assign({}, item.entity, omit(item, 'entity')))
-        output(stringify(builtDeps_))
+        const builtDeps = declNormalize(nodeEval(input.value.trim()[0] === '{' ? `(${$input.value})` : input.value))
+        const builtDeps_ = builtDeps.map(item => Object.assign({}, item.entity, omit(item, 'entity')));
+        builtDeps_.forEach(item => (item.tech || (delete item.tech)));
+        output(stringify(builtDeps_));
     } catch(e) {console.error(e);}
 }
+
+$stringifierJson.checked = localStorage.getItem('stringifier') === 'json'
+$stringifierInspect.checked = !$stringifierJson.checked
+syncStringifier()
 
 $input.value = localStorage.getItem('input')
 onInput()
@@ -38,6 +58,8 @@ try{
 }catch(e){console.error('wtf', e);}
 
 $input.addEventListener('input', onInput)
+$stringifierInspect.addEventListener('change', () => (syncStringifier('inspect'), onInput()))
+$stringifierJson.addEventListener('change', () => (syncStringifier('json'), onInput()))
 
 const onExitExamples = () => {
     $examples.classList.add('_hidden');
@@ -59,6 +81,7 @@ const go = (uri, link, shouldNotChangeHistory) => {
 $$('a').forEach(a => a.onclick = e => {e.preventDefault(); go(new URL(e.target.href).pathname, e.target); return false})
 
 const initPage = () => {
+
     go(location.hash.replace('#!',''))
 }
 
