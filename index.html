@@ -23,32 +23,38 @@
     <meta name="theme-color" content="#00ffff">
     <!-- Yandex.Metrika counter --> <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter41467794 = new Ya.Metrika({ id:41467794, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true, trackHash:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/41467794" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
     <style>
+    * { box-sizing: border-box; }
     body {
+        margin: 0;
+
+        font-family: 'Helvetica neue';
+    }
+    header {
+        position: relative;
+    }
+    .layout {
         display: flex;
         flex-direction: column;
         height: 100vh;
         justify-content: center;
-        margin: 0 calc(10px + 1vw);
-
-        font-family: 'Helvetica neue';
+        padding: calc(10px + 1vh) calc(10px + 1vw);
     }
 
-    body > * {
-        margin-bottom: calc(10px + 1vh);
+    .layout > * + * {
+        margin-top: calc(10px + 1vh);
     }
 
     main {
         display: flex;
-        height: 100%;
-        padding-bottom: 2em;
+        flex-grow: 1;
     }
 
     textarea {
         flex-basis: 50%;
-        height: 100%;
         padding: 1em;
+        margin: 0; /* reset */
 
-        letter-spacing: .1em;
+        letter-spacing: .05em;
         font-family: Consolas, Monaco, 'Source Code Pro', 'Roboto Mono', 'Droid Sans Mono', 'Courier New', Courier, monospace;
         font-size: 18px;
         resize: none;
@@ -85,9 +91,14 @@
         background: rgba(255, 173, 47, 0.01);
     }
 
-    /* .over-link { position: absolute; } */
+    .over-links {
+        position: absolute;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
 
-    ._hidden {display: none;}
+    ._hidden { display: none; }
 
     .examples {
         position: absolute;
@@ -95,28 +106,48 @@
         background: rgba(255, 255, 255, 0.9);
         padding: calc(10px + 1vw);
     }
+
     ._inactive {
+        -webkit-filter: blur(3px);
         filter: blur(3px);
     }
-    .link_pseudo { text-decoration: none; }
+
+    .link_pseudo {
+        text-decoration: none;
+    }
+
+    label input {
+        margin-right: .5em;
+    }
+
+    code {
+        font-size: larger;
+        font-family: monospace;
+    }
+    .stringify-selector {
+    }
     </style>
 </head>
 
 <body>
-    <div class="main">
-        <div>
-            <a href="/examples" class="over-link examples-link">Примеры</a>
-            <span>Сериализация: </span>
-            <label><input id="stringify-inspect" checked type="radio" name="stringify" value="inspect"> util.inspect</label>
-            <label><input id="stringify-json" type="radio" name="stringify" value="json"> JSON.stringify</label>
-        </div>
-        <h1>Deps.js playground</h1>
+    <div class="layout">
+        <header>
+            <section class="over-links">
+                <a href="/examples" class="examples-link">Примеры</a>
+                <span class="stringify-selector">
+                    <span>Сериализация: </span>
+                    <label><input id="stringify-inspect" checked type="radio" name="stringify" value="inspect"><code>util.inspect</code> (без кавычек)</label>
+                    <label><input id="stringify-json" type="radio" name="stringify" value="json"><code>JSON.stringify</code> (с отступами)</label>
+                </span>
+            </section>
+            <h1>Deps.js playground</h1>
+        </header>
+        <main>
+            <textarea id="input" autofocus spellcheck="false"></textarea>
+            <textarea id="output" readonly></textarea>
+        </main>
+        <footer class="status main">ready</footer>
     </div>
-    <main class="main">
-        <textarea id="input" autofocus spellcheck="false"></textarea>
-        <textarea id="output" readonly></textarea>
-    </main>
-    <div class="status main">ready</div>
     <section class="examples _hidden">
         <h1><a href="/" class="link_pseudo close-examples-link">❌</a> Примеры</h1>
         <ul>
